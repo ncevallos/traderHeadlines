@@ -12,7 +12,7 @@ $.getJSON("/articles", function(data) {
 $(document).on("click", "#notesbtn", function() {
   // Empty the notes from the note section
   $("#notes").empty();
-  // Save the id from the p tag
+  // Save the id from the tag
   var thisId = $(this).attr("data-id");
 
   // Now make an ajax call for the Article
@@ -28,7 +28,7 @@ $(document).on("click", "#notesbtn", function() {
       $("#notes").append("<input id='titleinput' name='title' >");
       // A textarea to add a new note body
       $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
-      // A button to submit a new note, with the id of the article saved to it
+      // A button to submit a new note, with the id of the article saved to it, and a button to close the modal.
       $("#notes").append("<button data-id='" + data._id + "' id='savenote' class='btn btn-primary notesBtn pull-right'>Save Note</button>");
 
       $("#notes").append("<button class='btn btn-secondary notesBtn pull-right' data-dismiss='modal'>Close</button>");
@@ -61,7 +61,7 @@ $(document).on("click", "#savenote", function() {
   })
     // With that done
     .done(function(data) {
-      // Empty the notes section
+      // close the modal after save is complete
       $('#exampleModal').modal('hide')
     });
 
@@ -87,16 +87,15 @@ $(document).on("click", "#save", function() {
 
 });
 
-// When you click the save article button
+// When you click the scrape link in the navigation
 $(document).on("click", "#scrape", function() {
 
-  // Run a POST request to change the note, using what's entered in the inputs
+  // Run a GET request to scrape the news from NYT
   $.ajax({
     method: "GET",
     url: "/scrape",
 
   })
-    // With that done
     .done(function(data) {
 
     });

@@ -12,7 +12,7 @@ var cheerio = require("cheerio");
 // Require all models
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -36,7 +36,7 @@ mongoose.connect(MONGODB_URI, {
 
 // Routes
 
-// A GET route for scraping the echojs website
+// A GET route for scraping the nyt website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
   axios.get("https://www.nytimes.com/section/business").then(function(response) {
@@ -45,12 +45,12 @@ app.get("/scrape", function(req, res) {
     ignoreWhitespace: true,
     xmlMode: true
 });
-    // Now, we grab every h2 within an article tag, and do the following:
+    // Now, we grab every story-body within an div article tag, and do the following:
     $("div .story-body").each(function(i, element) {
       // Save an empty result object
       var result = {};
 
-      // Add the text and href of every link, and save them as properties of the result object
+      // Add the text and href of every link, as well as summary and save them as properties of the result object
       result.title = $(this)
         .children()
         .children()
@@ -127,7 +127,6 @@ app.get("/articles/:id", function(req, res) {
 });
   //Route for save an Article
 app.post("/save/:id", function(req, res) {
-  // Create a new note and pass the req.body to the entry
   db.Article
     .findOneAndUpdate({ _id: req.params.id }, { saved: true })
     .then(function(dbArticle) {

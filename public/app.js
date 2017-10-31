@@ -100,4 +100,5 @@ $(document).on("click", "#scrape", function() {
 
     });
 
+  res.send("Scrape Complete");
 });
